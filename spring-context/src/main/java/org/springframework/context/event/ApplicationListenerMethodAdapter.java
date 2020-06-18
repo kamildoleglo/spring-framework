@@ -142,7 +142,7 @@ public class ApplicationListenerMethodAdapter implements GenericApplicationListe
 	/**
 	 * Initialize this instance.
 	 */
-	void init(ApplicationContext applicationContext, EventExpressionEvaluator evaluator) {
+	void init(ApplicationContext applicationContext, @Nullable EventExpressionEvaluator evaluator) {
 		this.applicationContext = applicationContext;
 		this.evaluator = evaluator;
 	}

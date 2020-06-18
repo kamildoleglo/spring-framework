@@ -39,7 +39,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.MethodIntrospector;
+import org.springframework.core.SpringProperties;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -63,6 +65,9 @@ import org.springframework.util.CollectionUtils;
 public class EventListenerMethodProcessor
 		implements SmartInitializingSingleton, ApplicationContextAware, BeanFactoryPostProcessor {
 
+	private static final boolean shouldIgnoreSpel =
+			SpringProperties.getFlag(AbstractApplicationContext.IGNORE_SPEL_PROPERTY_NAME);
+
 	protected final Log logger = LogFactory.getLog(getClass());
 
 	@Nullable
@@ -74,10 +79,17 @@ public class EventListenerMethodProcessor
 	@Nullable
 	private List<EventListenerFactory> eventListenerFactories;
 
-	private final EventExpressionEvaluator evaluator = new EventExpressionEvaluator();
+	@Nullable
+	private EventExpressionEvaluator evaluator;
 
 	private final Set<Class<?>> nonAnnotatedClasses = Collections.newSetFromMap(new ConcurrentHashMap<>(64));
 
+
+	public EventListenerMethodProcessor() {
+		if (!shouldIgnoreSpel) {
+			this.evaluator = new EventExpressionEvaluator();
+		}
+	}
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) {
