@@ -78,6 +78,7 @@ public class CorsBeanDefinitionParser implements BeanDefinitionParser {
 				if (mapping.hasAttribute("max-age")) {
 					config.setMaxAge(Long.parseLong(mapping.getAttribute("max-age")));
 				}
+				config.checkAllowCredentials();
 				corsConfigurations.put(mapping.getAttribute("path"), config.applyPermitDefaultValues());
 			}
 		}

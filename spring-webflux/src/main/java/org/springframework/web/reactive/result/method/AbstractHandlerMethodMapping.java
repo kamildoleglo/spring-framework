@@ -487,6 +487,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 				CorsConfiguration corsConfig = initCorsConfiguration(handler, method, mapping);
 				if (corsConfig != null) {
+					corsConfig.checkAllowCredentials();
 					this.corsLookup.put(handlerMethod, corsConfig);
 				}
 

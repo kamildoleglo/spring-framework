@@ -520,4 +520,10 @@ public class CorsConfiguration {
 		return (result.isEmpty() ? null : result);
 	}
 
+	public void checkAllowCredentials() {
+		if (this.allowCredentials == Boolean.TRUE && (this.allowedOrigins == null || this.allowedOrigins == DEFAULT_PERMIT_ALL)) {
+			throw new IllegalStateException("Allowed Origins must be set explicitly when credentials are allowed.");
+		}
+	}
+
 }

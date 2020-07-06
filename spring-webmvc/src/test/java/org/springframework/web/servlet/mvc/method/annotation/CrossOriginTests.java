@@ -55,6 +55,7 @@ import org.springframework.web.util.ServletRequestPathUtils;
 import org.springframework.web.util.pattern.PathPatternParser;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 /**
@@ -319,6 +320,11 @@ class CrossOriginTests {
 		assertThat(mapping.getHandler(request)).isNull();
 	}
 
+	@PathPatternsParameterizedTest
+	void invalid(TestRequestMappingInfoHandlerMapping mapping) {
+		assertThatExceptionOfType(IllegalStateException.class).isThrownBy(() -> mapping.registerHandler(new InvalidController()));
+	}
+
 
 	@Nullable
 	private CorsConfiguration getCorsConfiguration(@Nullable HandlerExecutionChain chain, boolean isPreFlightRequest) {
@@ -433,6 +439,16 @@ class CrossOriginTests {
 		@RequestMapping(path = "/bar", method = RequestMethod.GET)
 		public void bar() {
 		}
+
+		@CrossOrigin(origins = "*", allowCredentials = "true")
+		@RequestMapping(path = "/baz", method = RequestMethod.GET)
+		public void baz() {
+		}
+
+	}
+
+	@Controller
+	private static class InvalidController {
 
 		@CrossOrigin(allowCredentials = "true")
 		@RequestMapping(path = "/baz", method = RequestMethod.GET)

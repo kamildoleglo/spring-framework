@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 /**
@@ -289,6 +290,30 @@ public class CorsConfigurationTests {
 		assertThat(config.getAllowedOrigins()).isEqualTo(Arrays.asList("*", "https://domain.com"));
 		assertThat(config.getAllowedHeaders()).isEqualTo(Arrays.asList("*", "header1"));
 		assertThat(config.getAllowedMethods()).isEqualTo(Arrays.asList("GET", "HEAD", "POST", "PATCH"));
+	}
+
+	@Test
+	public void checkAllowCredentialsWithDefaultConstructor() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.checkAllowCredentials();
+
+		config.setAllowCredentials(true);
+		assertThatExceptionOfType(IllegalStateException.class).isThrownBy(config::checkAllowCredentials);
+
+		config.addAllowedOrigin("*");
+		config.checkAllowCredentials();
+	}
+
+	@Test
+	public void checkAllowCredentialsWithApplyPermitDefaultValues() {
+		CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
+		config.checkAllowCredentials();
+
+		config.setAllowCredentials(true);
+		assertThatExceptionOfType(IllegalStateException.class).isThrownBy(config::checkAllowCredentials);
+
+		config.addAllowedOrigin("*");
+		config.checkAllowCredentials();
 	}
 
 }

@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.cors.CorsConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 /**
  * Test fixture with a {@link CorsRegistry}.
@@ -61,6 +62,12 @@ public class CorsRegistryTests {
 		assertThat(config.getExposedHeaders()).isEqualTo(Arrays.asList("header3", "header4"));
 		assertThat(config.getAllowCredentials()).isEqualTo(false);
 		assertThat(config.getMaxAge()).isEqualTo(Long.valueOf(3600));
+	}
+
+	@Test
+	public void invalidMapping() {
+		this.registry.addMapping("/foo").allowCredentials(true);
+		assertThatExceptionOfType(IllegalStateException.class).isThrownBy(this.registry::getCorsConfigurations);
 	}
 
 }

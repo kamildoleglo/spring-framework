@@ -55,7 +55,9 @@ public class CorsRegistry {
 	protected Map<String, CorsConfiguration> getCorsConfigurations() {
 		Map<String, CorsConfiguration> configs = new LinkedHashMap<>(this.registrations.size());
 		for (CorsRegistration registration : this.registrations) {
-			configs.put(registration.getPathPattern(), registration.getCorsConfiguration());
+			CorsConfiguration corsConfiguration = registration.getCorsConfiguration();
+			corsConfiguration.checkAllowCredentials();
+			configs.put(registration.getPathPattern(), corsConfiguration);
 		}
 		return configs;
 	}

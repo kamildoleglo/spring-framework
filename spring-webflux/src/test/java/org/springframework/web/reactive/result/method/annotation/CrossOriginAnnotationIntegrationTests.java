@@ -354,7 +354,7 @@ class CrossOriginAnnotationIntegrationTests extends AbstractRequestMappingIntegr
 			return "bar";
 		}
 
-		@CrossOrigin(allowCredentials = "true")
+		@CrossOrigin(origins = "*", allowCredentials = "true")
 		@GetMapping("/baz")
 		public String baz() {
 			return "baz";
