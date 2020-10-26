@@ -1,12 +1,17 @@
 description = "Spring AOP"
 
+apply plugin: "kotlin"
+
 dependencies {
 	compile(project(":spring-beans"))
 	compile(project(":spring-core"))
+	compileOnly(project(":kotlin-coroutines"))
 	optional("org.aspectj:aspectjweaver")
 	optional("org.apache.commons:commons-pool2")
 	optional("com.jamonapi:jamon")
 	testCompile(testFixtures(project(":spring-beans")))
 	testCompile(testFixtures(project(":spring-core")))
+	testCompile("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+	testCompile("io.projectreactor:reactor-test")
 	testFixturesImplementation(testFixtures(project(":spring-core")))
 }

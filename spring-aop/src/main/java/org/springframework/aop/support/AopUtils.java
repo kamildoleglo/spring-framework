@@ -35,6 +35,8 @@ import org.springframework.aop.PointcutAdvisor;
 import org.springframework.aop.SpringProxy;
 import org.springframework.aop.TargetClassAware;
 import org.springframework.core.BridgeMethodResolver;
+import org.springframework.core.CoroutinesUtils;
+import org.springframework.core.KotlinDetector;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
@@ -341,6 +343,9 @@ public abstract class AopUtils {
 		// Use reflection to invoke the method.
 		try {
 			ReflectionUtils.makeAccessible(method);
+			if (KotlinDetector.isSuspendingFunction(method)) {
+				return CoroutinesUtils.invokeSuspendingFunction(method, target, args);
+			}
 			return method.invoke(target, args);
 		}
 		catch (InvocationTargetException ex) {
