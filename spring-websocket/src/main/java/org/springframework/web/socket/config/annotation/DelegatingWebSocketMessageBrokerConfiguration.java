@@ -39,7 +39,7 @@ import org.springframework.util.CollectionUtils;
  * @author Rossen Stoyanchev
  * @since 4.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class DelegatingWebSocketMessageBrokerConfiguration extends WebSocketMessageBrokerConfigurationSupport {
 
 	private final List<WebSocketMessageBrokerConfigurer> configurers = new ArrayList<>();
